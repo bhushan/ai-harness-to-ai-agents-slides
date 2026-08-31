@@ -1,0 +1,5 @@
+# Speaker material stays local. This repo is public.
+talk-script-*.md
+talk-notes-*.md
+
+.DS_Store
