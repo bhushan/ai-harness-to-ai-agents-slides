@@ -1267,6 +1267,135 @@ ul.clean li b { color: var(--alfred-color-text); font-weight: var(--alfred-font-
 .no-js .slide { opacity: 1; visibility: visible; }
 .no-js .step { opacity: 1; }
 
+/* ==========================================================================
+   27 · TWO WAYS OF WORKING  (slide 03)
+   Two lanes on one shared eight-stop track. The lanes are identical frames,
+   so the only thing that differs is how far along the track the work gets.
+   Answering stops at four and the rest of the track is dashed: that gap is
+   the argument, so nothing is allowed to fill it.
+   ========================================================================== */
+.lanes { display: grid; gap: var(--alfred-spacing-16); }
+
+.lane {
+  background-color: var(--alfred-color-surface);
+  border: var(--alfred-border-width-hairline) solid var(--alfred-color-border-subtle);
+  border-radius: var(--alfred-radius-md);
+  padding: var(--alfred-spacing-16) var(--alfred-spacing-20) var(--alfred-spacing-20);
+}
+
+/* The siglum and hairline that mark anything carrying evidence. */
+.lane-head {
+  display: flex;
+  align-items: center;
+  gap: var(--alfred-spacing-12);
+  margin-block-end: var(--alfred-spacing-14, 0.875rem);
+}
+.lane-name,
+.lane-count {
+  font-family: var(--alfred-font-family-mono);
+  font-size: 0.7rem;
+  letter-spacing: var(--alfred-font-tracking-caps);
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.lane-name  { font-weight: var(--alfred-font-weight-medium); color: var(--alfred-color-text-muted); }
+.lane-count { color: var(--alfred-color-text-disabled); }
+.lane-rule {
+  flex: 1;
+  block-size: var(--alfred-border-width-hairline);
+  background-color: var(--alfred-color-border-subtle);
+}
+.lane.lead .lane-name { color: var(--alfred-color-text-secondary); }
+
+/* One scale for both lanes, so stop four sits above stop four. */
+.track {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  gap: var(--alfred-spacing-16);
+  align-items: center;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.stop {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--alfred-spacing-8);
+  min-inline-size: 0;
+  padding: var(--alfred-spacing-10) var(--alfred-spacing-8);
+  border: var(--alfred-border-width-hairline) solid var(--alfred-color-border);
+  border-radius: var(--alfred-radius-md);
+  background-color: var(--alfred-color-surface-sunken);
+  font-family: var(--alfred-font-family-mono);
+  font-size: 0.84rem;
+  color: var(--alfred-color-text-secondary);
+  white-space: nowrap;
+}
+.stop svg {
+  inline-size: 0.95rem;
+  block-size: 0.95rem;
+  color: var(--alfred-color-text-muted);
+  flex: none;
+}
+
+/* The track itself, drawn in the gap to the left of each stop. */
+.stop + .stop::before {
+  content: '';
+  position: absolute;
+  inset-inline-end: 100%;
+  inline-size: var(--alfred-spacing-16);
+  block-size: var(--alfred-border-width-hairline);
+  background-color: var(--alfred-color-border);
+}
+
+/* The one chromatic moment on this slide: the end of the second lane is
+   the only place the work arrives somewhere you can check. */
+.stop.end {
+  border-color: var(--alfred-color-evidence-border);
+  border-inline-start: var(--alfred-border-width-marker) solid var(--alfred-color-evidence);
+  color: var(--alfred-color-evidence-text);
+}
+.stop.end svg { color: var(--alfred-color-evidence-text); }
+
+/* Track with no stops on it. Deliberately empty. */
+.rest {
+  grid-column: 5 / -1;
+  display: flex;
+  align-items: center;
+  gap: var(--alfred-spacing-12);
+  font-family: var(--alfred-font-family-mono);
+  font-size: 0.78rem;
+  color: var(--alfred-color-text-disabled);
+  white-space: nowrap;
+}
+.rest::before,
+.rest::after {
+  content: '';
+  flex: 1;
+  block-size: 0;
+  border-block-start: var(--alfred-border-width-hairline) dashed var(--alfred-color-border);
+}
+
+.verdict {
+  margin-block-start: var(--alfred-spacing-24);
+  font-size: 1.15rem;
+  line-height: var(--alfred-font-leading-snug, 1.4);
+  color: var(--alfred-color-text-disabled);
+}
+.verdict b {
+  font-weight: var(--alfred-font-weight-regular);
+  color: var(--alfred-color-text);
+}
+
+@media (max-inline-size: 900px) {
+  .track { grid-template-columns: repeat(4, 1fr); row-gap: var(--alfred-spacing-12); }
+  .rest { grid-column: 1 / -1; }
+  .stop + .stop::before { display: none; }
+}
+
 /* The ring the title diagram sits in. A hairline, not a glow: the system
    has no glows, and a blurred disc that size would outrank the title. */
 .halo {
@@ -1393,33 +1522,41 @@ ul.clean li b { color: var(--alfred-color-text); font-weight: var(--alfred-font-
 <section class="slide" data-section="Opening" data-title="The question">
   <div class="kicker">The question</div>
   <h2 class="quote step fade">What happens when AI stops <span class="dim">answering questions</span><br>and starts <span class="hl">doing the work</span>?</h2>
-  <div class="split" style="margin-top:1rem">
-    <div class="panel step">
-      <div class="ph">Answering</div>
-      <div class="flow">
-        <div class="node"><i data-i="user"></i>Human</div><div class="arr"></div>
-        <div class="node"><i data-i="message"></i>Question</div><div class="arr"></div>
-        <div class="node"><i data-i="bot"></i>AI</div><div class="arr"></div>
-        <div class="node"><i data-i="file"></i>Answer</div>
-      </div>
-      <p class="small" style="margin-top:.9rem">You are still the one who does the work.</p>
-    </div>
-    <div class="panel acc step">
-      <div class="ph">Doing</div>
-      <div class="hflow" style="gap:.5rem">
-        <span class="node"><i data-i="user"></i>Human</span><span class="harr">&rarr;</span>
-        <span class="node on"><i data-i="target"></i>Goal</span><span class="harr">&rarr;</span>
-        <span class="node"><i data-i="bot"></i>AI</span><span class="harr">&rarr;</span>
-        <span class="node"><i data-i="workflow"></i>Plan</span><span class="harr">&rarr;</span>
-        <span class="node"><i data-i="wrench"></i>Tools</span><span class="harr">&rarr;</span>
-        <span class="node"><i data-i="code"></i>Code</span><span class="harr">&rarr;</span>
-        <span class="node"><i data-i="test"></i>Tests</span><span class="harr">&rarr;</span>
-        <span class="node ok"><i data-i="check"></i>Result</span>
-      </div>
-      <p class="small" style="margin-top:.9rem">You are the one who <b class="acc">directs and verifies</b> the work.</p>
-    </div>
+  <div class="lanes">
+    <section class="lane step">
+      <header class="lane-head">
+        <span class="lane-name">Answering</span>
+        <span class="lane-rule"></span>
+        <span class="lane-count">4 steps</span>
+      </header>
+      <ol class="track">
+        <li class="stop"><i data-i="user"></i>Human</li>
+        <li class="stop"><i data-i="message"></i>Question</li>
+        <li class="stop"><i data-i="bot"></i>AI</li>
+        <li class="stop"><i data-i="file"></i>Answer</li>
+        <li class="rest">then you do the rest, by hand</li>
+      </ol>
+    </section>
+    <section class="lane lead step">
+      <header class="lane-head">
+        <span class="lane-name">Doing</span>
+        <span class="lane-rule"></span>
+        <span class="lane-count">8 steps</span>
+      </header>
+      <ol class="track">
+        <li class="stop"><i data-i="user"></i>Human</li>
+        <li class="stop"><i data-i="target"></i>Goal</li>
+        <li class="stop"><i data-i="bot"></i>AI</li>
+        <li class="stop"><i data-i="workflow"></i>Plan</li>
+        <li class="stop"><i data-i="wrench"></i>Tools</li>
+        <li class="stop"><i data-i="code"></i>Code</li>
+        <li class="stop"><i data-i="test"></i>Tests</li>
+        <li class="stop end"><i data-i="check"></i>Result</li>
+      </ol>
+    </section>
   </div>
-  <aside class="notes"><p><strong>0:45 &middot; you should be here at 01:40</strong></p><p>What happens when AI stops answering questions and starts doing the work?</p><p>Left, 2023: answer out, human still does every real step. Right: same model, but now a plan, tools, a repo, tests, a definition of done.</p><p><em>⭑ An answer is a suggestion. A result is a diff that passes tests.</em></p><p>▸ Cursor to the left panel, then the right, and say "left side of your screen".</p></aside>
+  <p class="verdict step fade">An answer is a suggestion. <b>A result is a diff that passes tests.</b></p>
+  <aside class="notes"><p><strong>0:45 &middot; you should be here at 01:40</strong></p><p>What happens when AI stops answering questions and starts doing the work?</p><p>Both lanes sit on the same track, so the distance the work travels is visible.</p><p>Top, 2023: four steps, then everything under the dashes you do by hand.</p><p>Bottom: same model, but now a plan, tools, a repo, tests, a definition of done. Eight steps, ending somewhere you can check.</p><p><em>⭑ An answer is a suggestion. A result is a diff that passes tests.</em></p><p>▸ Cursor along the top lane, hold on the empty dashes, then along the bottom to the blue terminal.</p></aside>
 </section>
 
 <!-- ============ 04 THE JOURNEY ============ -->
